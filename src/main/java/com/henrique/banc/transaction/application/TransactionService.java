@@ -1,6 +1,7 @@
 package com.henrique.banc.transaction.application;
 
 import com.henrique.banc.authorization.domain.AuthorizerService;
+import com.henrique.banc.notification.domain.NotificationService;
 import com.henrique.banc.shared.utils.exceptions.InvalidTransactionException;
 import com.henrique.banc.transaction.domain.Transaction;
 import com.henrique.banc.transaction.infrastructure.TransactionRepository;
@@ -17,6 +18,7 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final WalletRepository walletRepository;
     private final AuthorizerService authorizerService;
+    private final NotificationService notificationService;
 
     @Transactional
     public Transaction create(Transaction transaction) {
@@ -28,6 +30,8 @@ public class TransactionService {
         walletRepository.save(wallet.debit(transaction.value()));
 
         authorizerService.authorize(transaction);
+
+        notificationService.notify(newTransaction);
 
         return newTransaction;
     }
