@@ -1,6 +1,7 @@
 package com.henrique.banc.transaction.application;
 
-import com.henrique.banc.shared.exceptions.InvalidTransactionException;
+import com.henrique.banc.authorization.domain.AuthorizerService;
+import com.henrique.banc.shared.utils.exceptions.InvalidTransactionException;
 import com.henrique.banc.transaction.domain.Transaction;
 import com.henrique.banc.transaction.infrastructure.TransactionRepository;
 import com.henrique.banc.wallet.domain.Wallet;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final WalletRepository walletRepository;
+    private final AuthorizerService authorizerService;
 
     @Transactional
     public Transaction create(Transaction transaction) {
@@ -24,6 +26,8 @@ public class TransactionService {
 
         var wallet = walletRepository.findById(transaction.payer()).get();
         walletRepository.save(wallet.debit(transaction.value()));
+
+        authorizerService.authorize(transaction);
 
         return newTransaction;
     }
