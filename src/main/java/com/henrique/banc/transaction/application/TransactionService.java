@@ -12,6 +12,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class TransactionService {
@@ -47,5 +49,9 @@ public class TransactionService {
         return payer.type() == WalletType.COMUM.getValue() && payer.balance().compareTo(transaction.value()) >= 0 &&
                 payer.balance().compareTo(transaction.value()) >= 0 &&
                 !payer.id().equals(transaction.payee());
+    }
+
+    public List<Transaction> list() {
+        return transactionRepository.findAll();
     }
 }
