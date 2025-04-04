@@ -12,6 +12,6 @@ public class NotificationProducer {
     private final KafkaTemplate<String, Transaction> kafkaTemplate;
 
     public void sendNotification(Transaction transaction) {
-        kafkaTemplate.send("transaction-notification ", transaction);
+        kafkaTemplate.send("transaction-notification", transaction);
     }
 }
