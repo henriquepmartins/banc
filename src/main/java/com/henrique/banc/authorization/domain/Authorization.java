@@ -1,9 +1,16 @@
 package com.henrique.banc.authorization.domain;
 
-public record Authorization(
-        String message
-) {
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public record Authorization(String message) {
+
+    @JsonCreator
+    public Authorization(@JsonProperty("authorized") boolean authorized) {
+        this(authorized ? "authorized" : "not authorized");
+    }
+
     public boolean isAuthorized() {
-        return message.equals("Authorized");
+        return "authorized".equals(message);
     }
 }
